@@ -65,9 +65,13 @@ Para executar a API localmente, configure a connection string utilizando o User 
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=Roadmaps;User Id=sa;Password=SUA_SENHA;TrustServerCertificate=True" --project src/Roadmaps.Api
 ```
 
-Substitua `SUA_SENHA` pela senha configurada no `.env`.
+Substitua `SUA_SENHA` pela senha configurada no `.env`. Se alterar `MSSQL_PORT`, ajuste também a porta na connection string local.
 
 Os segredos são armazenados fora do repositório. O projeto já possui um `UserSecretsId` configurado.
+
+No Docker, a variável `ConnectionStrings__DefaultConnection` do `.env` é repassada à API pelo Compose. Ao alterar a senha, atualize tanto `MSSQL_SA_PASSWORD` quanto a senha dessa connection string. O arquivo `.env` não é carregado automaticamente pela API executada no host.
+
+Com a configuração padrão do ASP.NET Core, a precedência é: argumentos de linha de comando > variáveis de ambiente > User Secrets (em Development) > `appsettings.Development.json` > `appsettings.json`. Os arquivos `appsettings` versionados contêm apenas configurações de logging e hosts, sem credenciais.
 
 A API ainda não utiliza a conexão com o banco de dados. A integração será implementada na etapa de persistência.
 
@@ -103,7 +107,7 @@ docker compose --profile full up -d --build
 
 A API estará acessível em:
 
-`http://localhost:8080`
+`http://localhost:8080` (ou a porta configurada em `API_PORT`). A rota `/` retorna HTTP 404 enquanto não houver um endpoint raiz; isso é esperado.
 
 O serviço da API utiliza o profile `full`, enquanto o SQL Server é iniciado por padrão.
 
