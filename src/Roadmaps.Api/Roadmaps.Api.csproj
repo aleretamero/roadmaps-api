@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Roadmaps.Application\Roadmaps.Application.csproj" />
+    <ProjectReference Include="..\Roadmaps.Infrastructure\Roadmaps.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
