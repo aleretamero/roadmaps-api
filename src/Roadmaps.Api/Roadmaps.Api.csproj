@@ -7,10 +7,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Roadmaps.Application\Roadmaps.Application.csproj" />
+    <ProjectReference Include="..\Roadmaps.Infrastructure\Roadmaps.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

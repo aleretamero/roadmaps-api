@@ -21,6 +21,27 @@ services:
       retries: 12
       start_period: 30s
 
+  db-init:
+    image: roadmaps-sqlserver:dev
+    environment:
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./docker/sqlserver/init:/init:ro
+    entrypoint:
+      - /bin/sh
+      - -c
+    command:
+      - |
+        /opt/mssql-tools18/bin/sqlcmd \
+          -S db \
+          -U sa \
+          -P "$$MSSQL_SA_PASSWORD" \
+          -C -b -d master \
+          -i /init/01-create-database.sql
+
   api:
     profiles:
       - full
@@ -34,8 +55,8 @@ services:
     ports:
       - "${API_PORT:-8080}:8080"
     depends_on:
-      db:
-        condition: service_healthy
+      db-init:
+        condition: service_completed_successfully
 
 volumes:
   sqlserver_data:

@@ -1,6 +1,12 @@
+using Roadmaps.Infrastructure;
+
+using Microsoft.EntityFrameworkCore;
+using Roadmaps.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -12,6 +18,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    using var scope = app.Services.CreateScope();
+
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<RoadmapsDbContext>();
+
+    await dbContext.Database.MigrateAsync();
 }
 
 app.UseHttpsRedirection();
