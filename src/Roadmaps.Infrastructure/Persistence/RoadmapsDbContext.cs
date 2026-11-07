@@ -40,17 +40,18 @@ public class RoadmapsDbContext(DbContextOptions<RoadmapsDbContext> options)
             .HaveColumnType("datetime2(3)");
     }
 
-    public override int SaveChanges()
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {
         ApplyAuditFields();
-        return base.SaveChanges();
+        return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
     public override Task<int> SaveChangesAsync(
+        bool acceptAllChangesOnSuccess,
         CancellationToken cancellationToken = default)
     {
         ApplyAuditFields();
-        return base.SaveChangesAsync(cancellationToken);
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
     private void ApplyAuditFields()
